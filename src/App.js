@@ -9,9 +9,10 @@ const App = () => {
       <Router>
         <Navbar />
         <div className="container">
-          <h1>GitHub Users Data</h1>
           <Switch>
             <Route exact path="/" component={Search} />
+            <Route exact path="/about" component={About} />
+            <Route path="/*" component={NotFound}></Route>
           </Switch>
         </div>
       </Router>
