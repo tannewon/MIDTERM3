@@ -1,124 +1,83 @@
-// User.js
 import axios from "axios";
-import React, { Fragment, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom/cjs/react-router-dom.min";
-import Repos from './repos/Repos';
-const User = () => {
-  const { id } = useParams();
+import React, { Fragment, useEffect, useState, useContext } from "react";
+import { Link, useParams, useHistory } from "react-router-dom";
+import Repos from "../repos/Repos";
+import { TextContext } from "../TextContext";
 
-  const [user, setUser] = useState({});
-  const [repos, setRepos] = useState([]);
-  const getUser = async (username) => {
-    try {
-      const response = await axios.get(
-        `https://api.github.com/users/${username}`
-      );
-      const data = response.data;
-      setUser(data);
-    } catch (error) {
-      console.error("Error fetching data:", error.message);
+const User = () => {
+    const { id } = useParams();
+    const [user, setUser] = useState({});
+    const [repos, setRepos] = useState([]);
+    const { currentSearch, setCurrentSearch } = useContext(TextContext);
+   const history = useHistory()
+    const getUser = async (userName) => {
+        try {
+            const response = await axios.get(`https://api.github.com/users/${userName}`);
+            setUser(response.data);
+        } catch (error) {
+            console.log("Error fetching user: ", error.message);
+        }
+    };
+
+    const getUserRepos = async (userName) => {
+        try {
+            const response = await axios.get(`https://api.github.com/users/${userName}/repos`);
+            setRepos(response.data);
+        } catch (error) {
+            console.log("Error fetching user repositories: ", error.message);
+        }
+    };
+    const handleBackToTop = (e) => {
+      e.preventDefault()
+      const storedSearch = JSON.parse(localStorage.getItem("currentSearch"));
+      if (storedSearch) {
+          setCurrentSearch(storedSearch);
+
+      }
+      localStorage.removeItem("currentSearch");
+
+      history.push("/")
     }
-  };
-  const getUserRepos = async (id) => {
-    // To be completed ...
-    // This is the small exercise for students
-    // Students will write the code to fetch the user's repositories
-    // Then display the repositories in the User component
-  };
-  useEffect(() => {
-    getUser(id);
-    getUserRepos(id);
-  }, []);
-  const {
-    name,
-    avatar_url,
-    location,
-    bio,
-    company,
-    blog,
-    login,
-    html_url,
-    followers,
-    following,
-    public_repos,
-    public_gists,
-    hireable,
-  } = user;
-  return (
-    <Fragment>
-      <Link to="/" className="btn btn-light">
-        Back to Search
-      </Link>
-      Hireable:{" "}
-      {hireable ? (
-        <i className="fas fa-check text-success" />
-      ) : (
-        <i className="fas fa-times-circle text-danger" />
-      )}
-      <div className="card grid-2">
-        <div className="all-center">
-          <img
-            src={avatar_url}
-            alt={name}
-            className="round-img"
-            style={{ width: "150px" }}
-          />
-          <h1>{name}</h1>
-          <p>{location}</p>
-        </div>
-        <div>
-          {bio && (
-            <Fragment>
-              <h3>Bio:</h3>
-              <p>{bio}</p>
-            </Fragment>
-          )}
-          <a
-            href={html_url}
-            className="btn btn-dark my-1"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Show Github Profile
-          </a>
-          <ul>
-            <li>
-              {login && (
-                <Fragment>
-                  <strong>Username: </strong>
-                  {login}
-                </Fragment>
-              )}
-            </li>
-            <li>
-              {company && (
-                <Fragment>
-                  <strong>Company: </strong>
-                  {company}
-                </Fragment>
-              )}
-            </li>
-            <li>
-              {blog && (
-                <Fragment>
-                  <strong>Website: </strong>
-                  <a href={blog} target="_blank" rel="noopener noreferrer">
-                    {blog}
-                  </a>
-                </Fragment>
-              )}
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div className="card text-center">
-        <div className="badge badge-primary">Followers: {followers}</div>
-        <div className="badge badge-success">Following: {following}</div>
-        <div className="badge badge-light">Repository: {public_repos}</div>
-        <div className="badge badge-dark">Gist: {public_gists}</div>
-      </div>
-      <Repos repos={repos} />
-    </Fragment>
-  );
+    useEffect(() => {
+        getUser(id);
+        getUserRepos(id);
+    }, [id]);
+    return (
+        <Fragment>
+            <Link to="/" onClick={handleBackToTop} className="btn btn-light">Back to Search</Link>
+            Hireable: {user.hireable ? <i className="fas fa-check text-success" /> : <i className="fas fa-times-circle text-danger" />}
+            <div className="card grid-2">
+                <div className="all-center">
+                    <img src={user.avatar_url} alt={user.name} className="round-img" style={{ width: "150px" }} />
+                    <h1>{user.name}</h1>
+                    <p>{user.location}</p>
+                </div>
+                <div>
+                    {user.bio && (
+                        <Fragment>
+                            <h3>Bio: </h3>
+                            <p>{user.bio}</p>
+                        </Fragment>
+                    )}
+                    <a href={user.html_url} className="btn btn-dark my-1" target="_blank" rel="noopener noreferrer">Show Github Profile</a>
+                    <ul>
+                        <li>{user.login && <Fragment><strong>Username:</strong> {user.login}</Fragment>}</li>
+                        <li>{user.company && <Fragment><strong>Company:</strong> {user.company}</Fragment>}</li>
+                        <li>{user.blog && <Fragment><strong>Website: </strong><a href={user.blog} target="_blank" rel="noopener noreferrer">{user.blog}</a></Fragment>}</li>
+                    </ul>
+                </div>
+            </div>
+            <div className="card text-center">
+                <div className="badge badge-primary">Followers: {user.followers}</div>
+                <div className="badge badge-success">Following: {user.following}</div>
+                <div className="badge badge-light">Repositories: {user.public_repos}</div>
+                <div className="badge badge-dark">Gists: {user.public_gists}</div>
+            </div>
+            <div className="card text-center">
+                <Repos repos={repos} />
+            </div>
+        </Fragment>
+    );
 };
+
 export default User;

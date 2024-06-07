@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import Users from './Users';
-import { TextContext } from '../TextContext.jsx';
+import { TextContext } from '../TextContext';
 import { ThemeContext } from '../ThemeContext.jsx';
 
 const Search = () => {

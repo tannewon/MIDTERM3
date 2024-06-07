@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import RepoItem from "../RepoItem";
+import {RepoItem} from "./RepoItem";
 
 function Repos(props) {
   const repos= props.repos
