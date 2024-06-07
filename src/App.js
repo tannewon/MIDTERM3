@@ -2,8 +2,8 @@ import React from "react";
 import { BrowserRouter as Router } from "react-router-dom"; import "./App.css";
 import Home from "./components/layout/Home";
 import Navbar from "./components/layout/Navbar";
-import { TextProvider } from './components/TextContext';
-import { ThemeProvider } from './components/ThemeContext';
+import { TextProvider } from './components/TextContext.jsx';
+import { ThemeProvider } from './components/ThemeContext.jsx';
 
 const App = () => {
    return (

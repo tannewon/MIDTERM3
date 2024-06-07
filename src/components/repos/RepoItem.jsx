@@ -1,4 +1,4 @@
-function RepoItem(props) {
+export function RepoItem(props) {
     const repo = props.props;
     return (
       <div className="repo-items">

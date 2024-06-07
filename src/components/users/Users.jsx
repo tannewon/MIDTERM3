@@ -1,6 +1,7 @@
 // Users.js
 import React from "react";
-import UserItem from "./UserItem";
+import UserItem from "./UserItem.jsx";
+
 const Users = (props) => {
   const { users } = props;
   return (

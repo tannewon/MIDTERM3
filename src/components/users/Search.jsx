@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import Users from './Users';
-import { TextContext } from '../TextContext';
-import { ThemeContext } from '../ThemeContext.js';
+import { TextContext } from '../TextContext.jsx';
+import { ThemeContext } from '../ThemeContext.jsx';
 
 const Search = () => {
     const [text, setText] = useState('');
