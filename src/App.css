@@ -6,7 +6,7 @@
   --dark-color: #333333;
   --light-color: #f4f4f4;
   --danger-color: #dc3545;
-  --success-color: #28a745;
+  --success-color: #6f42c1; /* Changed from green to purple */
 }
 
 * {
@@ -329,7 +329,7 @@ textarea {
   padding: 0.4rem;
   font-size: 1.2rem;
   border: 1px solid #ccc;
-  border-color: green;
+  border-color: var(--success-color); /* Changed border color to purple */
 }
 
 input[type="submit"],
