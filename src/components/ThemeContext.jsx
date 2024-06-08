@@ -13,7 +13,15 @@ export const ThemeProvider = ({ children }) => {
     useEffect(() => {
         localStorage.setItem('theme', theme);
         document.documentElement.setAttribute('data-theme', theme);
+
+        // Set body background color based on theme
+        if (theme === 'dark') {
+            document.body.style.backgroundColor = '#121212'; // Dark theme background color
+        } else {
+            document.body.style.backgroundColor = '#FFFFFF'; // Light theme background color
+        }
     }, [theme]);
+
     return (
         <ThemeContext.Provider value={{ theme, setTheme }}>
             {children}
